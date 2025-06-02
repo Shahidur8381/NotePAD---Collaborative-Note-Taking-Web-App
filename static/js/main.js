@@ -4,12 +4,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const noteContent = document.getElementById('note-content');
     const noteComment = document.getElementById('note-comment');
     const addNoteBtn = document.getElementById('add-note-btn');
+    const deleteModal = document.getElementById('delete-modal');
+    const secretKeyInput = document.getElementById('secret-key');
+    const cancelDeleteBtn = document.getElementById('cancel-delete');
+    const confirmDeleteBtn = document.getElementById('confirm-delete');
+    const closeModalBtn = document.querySelector('.close');
+    
+    // Variable to store the ID of the note to be deleted
+    let noteToDeleteId = null;
 
     // Load all notes when page loads
     loadNotes();
 
     // Add event listener to the add note button
     addNoteBtn.addEventListener('click', addNote);
+    
+    // Modal event listeners
+    cancelDeleteBtn.addEventListener('click', closeModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    confirmDeleteBtn.addEventListener('click', confirmDelete);
+    
+    // Close modal when clicking outside of it
+    window.addEventListener('click', function(event) {
+        if (event.target === deleteModal) {
+            closeModal();
+        }
+    });
 
     // Function to load all notes
     function loadNotes() {
@@ -30,8 +50,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="note-content">${escapeHtml(note.content)}</p>
                         ${note.comment ? `<p class="note-comment">${escapeHtml(note.comment)}</p>` : ''}
                         <p class="note-date">${formatDate(note.created)}</p>
+                        <button class="delete-btn" data-id="${note.id}">Delete</button>
                     `;
                     notesList.appendChild(noteElement);
+                    
+                    // Add event listener to the delete button
+                    const deleteBtn = noteElement.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', function() {
+                        openDeleteModal(note.id);
+                    });
                 });
             })
             .catch(error => {
@@ -76,6 +103,59 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('Error adding note:', error);
             alert('Failed to add note. Please try again.');
+        });
+    }
+    
+    // Function to open the delete modal
+    function openDeleteModal(noteId) {
+        noteToDeleteId = noteId;
+        secretKeyInput.value = '';
+        deleteModal.style.display = 'block';
+    }
+    
+    // Function to close the delete modal
+    function closeModal() {
+        deleteModal.style.display = 'none';
+        noteToDeleteId = null;
+    }
+    
+    // Function to confirm and execute note deletion
+    function confirmDelete() {
+        const secretKey = secretKeyInput.value.trim();
+        
+        if (!secretKey) {
+            alert('Please enter the secret key');
+            return;
+        }
+        
+        fetch(`/notes/${noteToDeleteId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                secret_key: secretKey
+            })
+        })
+        .then(response => {
+            if (response.status === 403) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Invalid secret key');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                closeModal();
+                loadNotes();
+            } else {
+                alert('Error: ' + (data.error || 'Failed to delete note'));
+            }
+        })
+        .catch(error => {
+            console.error('Error deleting note:', error);
+            alert(error.message || 'Failed to delete note. Please try again.');
         });
     }
 
