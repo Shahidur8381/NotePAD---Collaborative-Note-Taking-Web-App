@@ -77,6 +77,19 @@ def add_note():
     
     return jsonify({'success': True}), 201
 
+@app.route('/notes/<int:note_id>', methods=['DELETE'])
+def delete_note(note_id):
+    secret_key = request.json.get('secret_key')
+    
+    if not secret_key or secret_key != "delete":
+        return jsonify({'error': 'Invalid secret key'}), 403
+    
+    db = get_db()
+    db.execute('DELETE FROM notes WHERE id = ?', (note_id,))
+    db.commit()
+    
+    return jsonify({'success': True}), 200
+
 # Run the application
 if __name__ == '__main__':
     app.run(debug=True)
