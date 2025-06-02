@@ -28,7 +28,7 @@ NotePAD is a lightweight, full-stack web application for adding and viewing note
 ### ⚙️ Installation
 
 ```bash
-git clone https://github.com/your-username/notepad-app.git
+git clone https://github.com/Shahidur8381/NotePAD---Collaborative-Note-Taking-Web-App
 cd notepad-app
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
