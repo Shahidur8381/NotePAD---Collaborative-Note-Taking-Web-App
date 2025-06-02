@@ -23,12 +23,6 @@ NotePAD is a lightweight, full-stack web application for adding and viewing note
 
 ---
 
-## 📷 Preview
-
-![NotePAD UI Preview](static/assets/shawonbgremoved.png) <!-- Optional: Replace or remove -->
-
----
-
 ## 🧑‍💻 Getting Started
 
 ### ⚙️ Installation
