@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotePAD</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/shawonbgremoved.png') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Note Taking App</h1>
+        
+        <div class="note-form">
+            <h2>Add a New Note</h2>
+            <div class="form-group">
+                <label for="note-content">Note Content:</label>
+                <textarea id="note-content" rows="4" placeholder="Enter your note here..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="note-comment">Comment:</label>
+                <input type="text" id="note-comment" placeholder="Add a comment (optional)">
+            </div>
+            <button id="add-note-btn">Add Note</button>
+        </div>
+        
+        <div class="notes-container">
+            <h2>All Notes</h2>
+            <div id="notes-list">
+                <!-- Notes will be displayed here -->
+                <p class="loading-text">Loading notes...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
