@@ -34,6 +34,20 @@
         </div>
     </div>
 
+    <!-- Delete Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Delete Note</h3>
+            <p>Enter the secret key to delete this note:</p>
+            <input type="password" id="secret-key" placeholder="Enter secret key">
+            <div class="modal-buttons">
+                <button id="cancel-delete">Cancel</button>
+                <button id="confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
